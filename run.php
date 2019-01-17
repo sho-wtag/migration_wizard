@@ -3,8 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Welcome to Migration Wizard</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="bootstrap.css">
+	<link rel="stylesheet" href="font-awesome.min.css">
 </head>
 <body>
 <section class="container pt-4">
@@ -59,8 +59,8 @@
 		</div>
 	</div>
 </section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="bootstrap.min.js"></script>
+<script src="jquery.min.js"></script>
 <script>
 	var dbnames = new Array("crmentity", "account", "accountbillads", "accountscf", "accountshipads", "accounttype", "contactaddress", "contactdetails", "contactscf", "contactsubdetails", "productcategory", "productcf", "products", "notes", "cvadvfilter", "cvcolumnlist", "cvstdfilter", "customview", "cvcolumnlist", "user2role", "users");
 	var selected, completed, lastprogress;
