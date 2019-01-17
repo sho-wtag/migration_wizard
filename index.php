@@ -53,6 +53,11 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div id="logarea"></div>
+		</div>
+	</div>
 </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -78,11 +83,13 @@
 	});
 
 	function process(index) {
+		$("#logarea").append("<span>Start processing table: </span><span style=\"font-style: italic; color: blue;\">" + dbnames[index] + "</span><br/>");
+
 		$("#active").text("vtiger_" + dbnames[index]);
 		var formData = new FormData();
 		formData.append("name", dbnames[index]);
 
-		lastprogress = index / (dbnames.length - 1);
+		lastprogress = index / dbnames.length;
 
 		if (selected == index)
 			getProgress();
@@ -109,9 +116,10 @@
 				return xhr ;
 			}, success: function(data) {
 				var nindex = index + 1;
-				if (nindex < dbnames.length)
+				if (nindex < dbnames.length) {
+					$("#logarea").append("<span>Processing table: </span><span style=\"font-style: italic; color: blue;\">" + dbnames[index] + "</span><span>&nbsp;completed</span><br/>");
 					process(nindex);
-				else {
+				} else {
 					completed = 1;
 					$("#display").text("Migration completed!");
 				}
@@ -137,7 +145,7 @@
                 var p_sub = 0, p_total = 0;
 
 				p_sub = Math.floor(position * 100 / total);
-				p_total = ((position / (total * (dbnames.length - 1)) + lastprogress) * 100).toFixed(2);
+				p_total = ((position / (total * dbnames.length) + lastprogress) * 100).toFixed(2);
 
 				$("#sub").css("width", p_sub + "%");
 				$("#sub").text(p_sub + "%");

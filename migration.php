@@ -1,12 +1,14 @@
 <?php
+// Parse ini file
+$ini_array = parse_ini_file("migrate.ini", true);
+
 // Check input data
-$name = "crmentity";
-//if (isset($_POST['name'])) {
-//	$name = $_POST['name'];
-//} else {
-//	echo "Cannot be access direct. Exit running.";
-//	exit;
-//}
+if (isset($_POST['name'])) {
+	$name = $_POST['name'];
+} else {
+	echo "Cannot be accessed direct. Exit running.";
+	exit;
+}
 
 ini_set('max_execution_time', 0); // to get unlimited php script execution time
 
@@ -16,22 +18,10 @@ $_SESSION['progress'] = 0;
 session_write_close();
 
 // Open source database
-$link_src = mysqli_connect('localhost', 'root', 'mysql', 'crm5.0.4');
-if (!$link_src) {
-	echo "Error: Unable to connect to source database." . PHP_EOL;
-	echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-	echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-	exit;
-}
+$link_src = mysqli_connect($ini_array['source']['hostname'], $ini_array['source']['username'], $ini_array['source']['password'], $ini_array['source']['database']) or die(mysqli_connect_error());
 
 // Open destination database
-$link_dst = mysqli_connect('localhost', 'root', 'mysql', 'crm7.1.0');
-if (!$link_dst) {
-	echo "Error: Unable to connect to destination database." . PHP_EOL;
-	echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-	echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-	exit;
-}
+$link_dst = mysqli_connect($ini_array['destination']['hostname'], $ini_array['destination']['username'], $ini_array['destination']['password'], $ini_array['destination']['database']) or die(mysqli_connect_error());
 
 // General class to generate SQL statement
 class QueryBuilder {
@@ -63,7 +53,6 @@ class QueryBuilder {
 		}
 	}
 }
-
 
 // vtiger_crmentity
 if ($name == "crmentity") {
@@ -1236,6 +1225,10 @@ if ($name == "users") {
 				FROM vtiger_users
 				ORDER BY id";
 	$result_src = $link_src->query($sql_src) or die(mysqli_error($link_src));
+	$sql_dst = "DELETE
+				FROM vtiger_users
+				WHERE user_name != 'admin'";
+	$result_dst = $link_dst->query($sql_dst) or die(mysqli_error($link_dst));
 	if ($result_src->num_rows > 0) {
 		$rows_total = $result_src->num_rows;
 		$row_index = 0;
